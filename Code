@@ -396,423 +396,169 @@ int main()
     return 0;
 }
 11. Display the Adjacency Matrix of a Graph
-Explanation:
-An Adjacency Matrix is a 2D array used to represent a graph. The rows and columns represent the vertices, and the value at matrix[i][j] indicates whether there is an edge from vertex i to vertex j.
-
-For an undirected graph, if there is an edge between vertices i and j, both matrix[i][j] and matrix[j][i] are 1.
-For a directed graph, only matrix[i][j] is 1 if there is an edge from i to j.
-C++ Code for Adjacency Matrix:
-cpp
-Copy code
 #include <iostream>
 #include <vector>
 using namespace std;
-
-class Graph {
-    int vertices;
-    vector<vector<int>> adjMatrix;
-
-public:
-    Graph(int v) : vertices(v) {
-        adjMatrix.resize(vertices, vector<int>(vertices, 0));  // Initialize matrix with 0s
-    }
-
-    void addEdge(int u, int v) {
-        adjMatrix[u][v] = 1;  // For directed graph
-        adjMatrix[v][u] = 1;  // For undirected graph
-    }
-
-    void displayAdjMatrix() {
-        cout << "Adjacency Matrix: " << endl;
-        for (int i = 0; i < vertices; i++) {
-            for (int j = 0; j < vertices; j++) {
-                cout << adjMatrix[i][j] << " ";
-            }
-            cout << endl;
+void displayAdjMatrix(int n, vector<vector<int>>& adjMatrix) {
+    cout << "Adjacency Matrix:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << adjMatrix[i][j] << " ";
         }
+        cout << endl;
     }
-};
-
+}
 int main() {
     int n, e, u, v;
     cout << "Enter the number of vertices: ";
     cin >> n;
-
-    Graph g(n);
-
+    vector<vector<int>> adjMatrix(n, vector<int>(n, 0));
     cout << "Enter the number of edges: ";
     cin >> e;
-
-    cout << "Enter the edges (u v):" << endl;
+    cout << "Enter the edges (u v):\n";
     for (int i = 0; i < e; i++) {
         cin >> u >> v;
-        g.addEdge(u, v);
+        adjMatrix[u][v] = adjMatrix[v][u] = 1;
     }
-
-    g.displayAdjMatrix();
-
+    displayAdjMatrix(n, adjMatrix);
     return 0;
 }
-Explanation:
-addEdge(u, v): Adds an edge between vertices u and v by setting the corresponding matrix elements.
-displayAdjMatrix(): Prints the adjacency matrix row by row.
 12. Display the Adjacency List of a Graph
-Explanation:
-An Adjacency List is an array of lists where each index represents a vertex, and each list stores the vertices adjacent to that vertex. This representation is more space-efficient for sparse graphs.
-
-C++ Code for Adjacency List:
-cpp
-Copy code
 #include <iostream>
 #include <vector>
-#include <list>
 using namespace std;
-
-class Graph {
-    int vertices;
-    vector<list<int>> adjList;
-
-public:
-    Graph(int v) : vertices(v) {
-        adjList.resize(vertices);
-    }
-
-    void addEdge(int u, int v) {
-        adjList[u].push_back(v);  // For directed graph
-        adjList[v].push_back(u);  // For undirected graph
-    }
-
-    void displayAdjList() {
-        cout << "Adjacency List: " << endl;
-        for (int i = 0; i < vertices; i++) {
-            cout << i << ": ";
-            for (auto v : adjList[i]) {
-                cout << v << " ";
-            }
-            cout << endl;
+void displayAdjList(int n, vector<vector<int>>& adjList) {
+    cout << "Adjacency List:\n";
+    for (int i = 0; i < n; i++) {
+        cout << i << ": ";
+        for (int v : adjList[i]) {
+            cout << v << " ";
         }
+        cout << endl;
     }
-};
-
+}
 int main() {
     int n, e, u, v;
     cout << "Enter the number of vertices: ";
     cin >> n;
-
-    Graph g(n);
-
+    vector<vector<int>> adjList(n);
     cout << "Enter the number of edges: ";
     cin >> e;
-
-    cout << "Enter the edges (u v):" << endl;
+    cout << "Enter the edges (u v):\n";
     for (int i = 0; i < e; i++) {
         cin >> u >> v;
-        g.addEdge(u, v);
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
     }
-
-    g.displayAdjList();
-
+    displayAdjList(n, adjList);
     return 0;
 }
-Explanation:
-addEdge(u, v): Adds an edge between u and v by appending v to the adjacency list of u (and vice versa for undirected graphs).
-displayAdjList(): Prints the adjacency list by traversing the list of each vertex.
-Example Input/Output:
-Input for Adjacency Matrix:
-mathematica
-Copy code
-Enter the number of vertices: 4
-Enter the number of edges: 4
-Enter the edges (u v):
-0 1
-0 2
-1 2
-2 3
-Output for Adjacency Matrix:
-yaml
-Copy code
-Adjacency Matrix:
-0 1 1 0 
-1 0 1 0 
-1 1 0 1 
-0 0 1 0 
-Input for Adjacency List:
-mathematica
-Copy code
-Enter the number of vertices: 4
-Enter the number of edges: 4
-Enter the edges (u v):
-0 1
-0 2
-1 2
-2 3
-Output for Adjacency List:
-yaml
-Copy code
-Adjacency List:
-0: 1 2 
-1: 0 2 
-2: 0 1 3 
-3: 2 
-This code provides an efficient way to represent and display both the adjacency matrix and adjacency list of a graph.
-
-
-
-
-
-
-You said:
-13. Write a program to traverse a graph using Breadth First Search.
-14. Write a program to traverse a graph using Depth First Search.
-15. Write a program to determine the value of the nth Fibonacci number Fn where Fn
-= Fn-1+ Fn-2 and F1 F2 = 1 and n<=500.
-ChatGPT said:
-ChatGPT
-13. Breadth First Search (BFS) Traversal
-Explanation:
-Breadth First Search (BFS) is an algorithm for traversing or searching tree or graph data structures. It starts at a given node (root) and explores all the neighbors at the present depth level before moving on to nodes at the next depth level. BFS uses a queue to keep track of the nodes to visit.
-
-C++ Code for BFS:
-cpp
-Copy code
+13. Breadth-First Search (BFS) Traversal
 #include <iostream>
 #include <vector>
 #include <queue>
 using namespace std;
-
-class Graph {
-    int vertices;
-    vector<vector<int>> adjList;
-
-public:
-    Graph(int v) : vertices(v) {
-        adjList.resize(vertices);
-    }
-
-    void addEdge(int u, int v) {
-        adjList[u].push_back(v);
-        adjList[v].push_back(u);  // For undirected graph
-    }
-
-    void BFS(int start) {
-        vector<bool> visited(vertices, false);
-        queue<int> q;
-        visited[start] = true;
-        q.push(start);
-
-        cout << "BFS Traversal: ";
-        while (!q.empty()) {
-            int node = q.front();
-            q.pop();
-            cout << node << " ";
-
-            for (int neighbor : adjList[node]) {
-                if (!visited[neighbor]) {
-                    visited[neighbor] = true;
-                    q.push(neighbor);
-                }
+void BFS(int start, int n, vector<vector<int>>& adjList) {
+    vector<bool> visited(n, false);
+    queue<int> q;
+    visited[start] = true;
+    q.push(start);
+    cout << "BFS Traversal: ";
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+        cout << node << " ";
+        for (int neighbor : adjList[node]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                q.push(neighbor);
             }
         }
-        cout << endl;
     }
-};
-
+    cout << endl;
+}
 int main() {
     int n, e, u, v, start;
     cout << "Enter the number of vertices: ";
     cin >> n;
-
-    Graph g(n);
-
+    vector<vector<int>> adjList(n);
     cout << "Enter the number of edges: ";
     cin >> e;
-
-    cout << "Enter the edges (u v):" << endl;
+    cout << "Enter the edges (u v):\n";
     for (int i = 0; i < e; i++) {
         cin >> u >> v;
-        g.addEdge(u, v);
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
     }
-
     cout << "Enter the starting vertex for BFS: ";
     cin >> start;
-
-    g.BFS(start);
-
+    BFS(start, n, adjList);
     return 0;
 }
-Explanation of BFS:
-addEdge(u, v): Adds an edge between vertices u and v.
-BFS(start): Performs BFS traversal starting from vertex start using a queue.
-14. Depth First Search (DFS) Traversal
-Explanation:
-Depth First Search (DFS) is an algorithm for traversing or searching tree or graph data structures. Starting at the root (or any arbitrary node), DFS explores as far as possible along each branch before backtracking. DFS can be implemented using recursion or using an explicit stack.
-
-C++ Code for DFS:
-cpp
-Copy code
+14. Depth-First Search (DFS) Traversal
 #include <iostream>
 #include <vector>
 #include <stack>
 using namespace std;
-
-class Graph {
-    int vertices;
-    vector<vector<int>> adjList;
-
-public:
-    Graph(int v) : vertices(v) {
-        adjList.resize(vertices);
-    }
-
-    void addEdge(int u, int v) {
-        adjList[u].push_back(v);
-        adjList[v].push_back(u);  // For undirected graph
-    }
-
-    void DFS(int start) {
-        vector<bool> visited(vertices, false);
-        stack<int> s;
-        s.push(start);
-
-        cout << "DFS Traversal: ";
-        while (!s.empty()) {
-            int node = s.top();
-            s.pop();
-
-            if (!visited[node]) {
-                visited[node] = true;
-                cout << node << " ";
-            }
-
-            // Add all unvisited neighbors to the stack
+void DFS(int start, int n, vector<vector<int>>& adjList) {
+    vector<bool> visited(n, false);
+    stack<int> s;
+    s.push(start);
+    cout << "DFS Traversal: ";
+    while (!s.empty()) {
+        int node = s.top();
+        s.pop();
+        if (!visited[node]) {
+            visited[node] = true;
+            cout << node << " ";
             for (int neighbor : adjList[node]) {
                 if (!visited[neighbor]) {
                     s.push(neighbor);
                 }
             }
         }
-        cout << endl;
     }
-};
-
+    cout << endl;
+}
 int main() {
     int n, e, u, v, start;
     cout << "Enter the number of vertices: ";
     cin >> n;
-
-    Graph g(n);
-
+    vector<vector<int>> adjList(n);
     cout << "Enter the number of edges: ";
     cin >> e;
-
-    cout << "Enter the edges (u v):" << endl;
+    cout << "Enter the edges (u v):\n";
     for (int i = 0; i < e; i++) {
         cin >> u >> v;
-        g.addEdge(u, v);
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
     }
-
     cout << "Enter the starting vertex for DFS: ";
     cin >> start;
-
-    g.DFS(start);
-
+    DFS(start, n, adjList);
     return 0;
 }
-Explanation of DFS:
-addEdge(u, v): Adds an edge between vertices u and v.
-DFS(start): Performs DFS traversal starting from vertex start using a stack.
 15. Fibonacci Sequence for nth Fibonacci Number
-Explanation:
-The Fibonacci Sequence is a series of numbers where each number is the sum of the two preceding ones, usually starting with 0 and 1. The nth Fibonacci number can be computed using dynamic programming or recursion. For large n, we can use an iterative approach to avoid stack overflow or excessive recursion calls.
-
-C++ Code for Fibonacci Calculation:
-cpp
-Copy code
 #include <iostream>
-#include <vector>
 using namespace std;
-
-class Fibonacci {
-public:
-    // Method to calculate the nth Fibonacci number
-    int fibonacci(int n) {
-        if (n <= 1) return 1;  // F1 and F2 are 1
-
-        int a = 1, b = 1, result;
-        for (int i = 2; i <= n; i++) {
-            result = a + b;
-            a = b;
-            b = result;
-        }
-        return result;
+int fibonacci(int n) {
+    if (n <= 1) return 1;
+    int a = 1, b = 1, result;
+    for (int i = 2; i <= n; i++) {
+        result = a + b;
+        a = b;
+        b = result;
     }
-};
-
+    return result;
+}
 int main() {
     int n;
     cout << "Enter the value of n (n <= 500): ";
     cin >> n;
-
     if (n > 500) {
-        cout << "n should be less than or equal to 500." << endl;
+        cout << "n should be less than or equal to 500.\n";
         return 1;
     }
-
-    Fibonacci fib;
-    cout << "Fibonacci(" << n << ") = " << fib.fibonacci(n) << endl;
-
+    cout << "Fibonacci(" << n << ") = " << fibonacci(n) << endl;
     return 0;
 }
-Explanation of Fibonacci Calculation:
-The fibonacci(n) method uses an iterative approach to calculate the nth Fibonacci number.
-We initialize two variables a and b to 1 (F1 and F2).
-We then loop from 2 to n, updating a and b to the next Fibonacci numbers.
-Example Input/Output:
-BFS Example:
-Input:
-
-mathematica
-Copy code
-Enter the number of vertices: 5
-Enter the number of edges: 4
-Enter the edges (u v):
-0 1
-0 2
-1 3
-2 4
-Enter the starting vertex for BFS: 0
-Output:
-
-yaml
-Copy code
-BFS Traversal: 0 1 2 3 4
-DFS Example:
-Input:
-
-mathematica
-Copy code
-Enter the number of vertices: 5
-Enter the number of edges: 4
-Enter the edges (u v):
-0 1
-0 2
-1 3
-2 4
-Enter the starting vertex for DFS: 0
-Output:
-
-yaml
-Copy code
-DFS Traversal: 0 2 4 1 3
-Fibonacci Example:
-Input:
-
-java
-Copy code
-Enter the value of n (n <= 500): 10
-Output:
-
-scss
-Copy code
-Fibonacci(10) = 89
-This code provides a simple, efficient solution for BFS, DFS, and Fibonacci number calculation up to n = 500.
